@@ -1,6 +1,5 @@
 function solution(files) { 
-    
-    const headSortedFiles = files.sort((a, b) => {
+    return files.sort((a, b) => {
         const [aHead, aNum] = a.match(/^(\D+)(\d+)/).slice(1, 3);
         const [bHead, bNum] = b.match(/^(\D+)(\d+)/).slice(1, 3);
         
@@ -9,6 +8,4 @@ function solution(files) {
         
         return Number(aNum) - Number(bNum);
    });
-  
-    return headSortedFiles;
 }
