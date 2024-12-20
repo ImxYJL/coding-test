@@ -1,20 +1,9 @@
 function solution(phone_book) {
-    var answer = true;
-    const numMap = new Map();
+    phone_book.sort();
     
-    phone_book.forEach(num => numMap.set(num, num));
+    for(let i=0; i<phone_book.length -1; i++){
+        if(phone_book[i+1].startsWith(phone_book[i])) return false;
+    }
     
-    phone_book.forEach(num =>{
-        const len = num.length;
-        for(let i=0; i<len; i++){
-            const str = num.slice(0, i); // 이거 처음에는 하나겠지?
-            if(numMap.has(str)) {
-                answer = false;
-                break;
-            }
-        }
-        if(!answer) return;
-    })
-    
-    return answer;
+    return true;
 }
