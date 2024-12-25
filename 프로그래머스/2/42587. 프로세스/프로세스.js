@@ -1,19 +1,19 @@
 function solution(priorities, location) {
     let count = 1;
-    let queue = [...priorities.map((p, idx) => [p, idx === location])].reverse();
-    
-    while(queue.length > 0){
-        const max = Math.max(...queue.map((item) => item[0]));
-        while(queue.at(-1)[0] !== max){
-            const tmp = queue.pop();
-            queue = [tmp, ...queue];
+    let queue = priorities.map((p, idx) => [p, idx === location]);
+
+    while (queue.length > 0) {
+        const max = Math.max(...queue.map(item => item[0]));
+
+        const tmp = queue.shift();
+
+        if (tmp[0] === max) {
+            if (tmp[1]) return count; 
+            count++;
+        } else {
+            queue.push(tmp);
         }
-        
-        const curMax = queue.pop(); 
-        
-        if (curMax[1]) return count; 
-        count++;
     }
-    
+
     return count;
 }
