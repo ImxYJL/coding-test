@@ -5,109 +5,94 @@ const bd = input.slice(1).map(line => line.split(' ').map(Number));
 
 const getMax = (bd) => Math.max(...bd.flat());
 
-const moveRight = (board) => {
-    let bd = board.map(row => [...row]);
-    let check = Array.from({ length: n }, () => Array(n).fill(false));
+// 한 줄을 왼쪽으로 이동 & 합치는 함수
+const moveRow = (row) => {
+    let filtered = row.filter(num => num !== 0); // 0 제거
+    let newRow = Array(n).fill(0);
+    let index = 0;
 
-    for (let i = 0; i < n; i++) {
-        for (let j = n - 2; j >= 0; j--) {
-            if (bd[i][j] === 0) continue;
-            
-            for (let k = j + 1; k < n; k++) {
-                if (bd[i][k] === bd[i][k - 1] && !check[i][k]) {
-                    bd[i][k] *= 2;
-                    bd[i][k - 1] = 0;
-                    check[i][k] = true;
-                    break;
-                } else if (bd[i][k] === 0) {
-                    bd[i][k] = bd[i][k - 1];
-                    bd[i][k - 1] = 0;
-                } else break;
-            }
+    for (let i = 0; i < filtered.length; i++) {
+        if (i < filtered.length - 1 && filtered[i] === filtered[i + 1]) {
+            newRow[index++] = filtered[i] * 2;
+            i++; // 합쳐졌으므로 다음 숫자는 건너뛴다.
+        } else {
+            newRow[index++] = filtered[i];
         }
     }
-    return bd;
+
+    return newRow;
 };
 
-const moveLeft = (board) => {
-    let bd = board.map(row => [...row]);
-    let check = Array.from({ length: n }, () => Array(n).fill(false));
-
-    for (let i = 0; i < n; i++) {
-        for (let j = 1; j < n; j++) {
-            if (bd[i][j] === 0) continue;
-            
-            for (let k = j - 1; k >= 0; k--) {
-                if (bd[i][k] === bd[i][k + 1] && !check[i][k]) {
-                    bd[i][k] *= 2;
-                    bd[i][k + 1] = 0;
-                    check[i][k] = true;
-                    break;
-                } else if (bd[i][k] === 0) {
-                    bd[i][k] = bd[i][k + 1];
-                    bd[i][k + 1] = 0;
-                } else break;
-            }
-        }
-    }
-    return bd;
-};
-
-const moveDown = (board) => {
-    let bd = board.map(row => [...row]);
-    let check = Array.from({ length: n }, () => Array(n).fill(false));
-
-    for (let i = 0; i < n; i++) {
-        for (let j = n - 2; j >= 0; j--) {
-            if (bd[j][i] === 0) continue;
-            
-            for (let k = j + 1; k < n; k++) {
-                if (bd[k][i] === bd[k - 1][i] && !check[k][i]) {
-                    bd[k][i] *= 2;
-                    bd[k - 1][i] = 0;
-                    check[k][i] = true;
-                    break;
-                } else if (bd[k][i] === 0) {
-                    bd[k][i] = bd[k - 1][i];
-                    bd[k - 1][i] = 0;
-                } else break;
-            }
-        }
-    }
-    return bd;
-};
-
+// **상 (Up) 이동**
 const moveUp = (board) => {
-    let bd = board.map(row => [...row]);
-    let check = Array.from({ length: n }, () => Array(n).fill(false));
+    let newBoard = Array.from({ length: n }, () => Array(n).fill(0));
 
-    for (let i = 0; i < n; i++) {
-        for (let j = 1; j < n; j++) {
-            if (bd[j][i] === 0) continue;
-            for (let k = j - 1; k >= 0; k--) {
-                if (bd[k][i] === bd[k + 1][i] && !check[k][i]) {
-                    bd[k][i] *= 2;
-                    bd[k + 1][i] = 0;
-                    check[k][i] = true;
-                    break;
-                } else if (bd[k][i] === 0) {
-                    bd[k][i] = bd[k + 1][i];
-                    bd[k + 1][i] = 0;
-                } else break;
-            }
+    for (let j = 0; j < n; j++) {
+        let col = [];
+        for (let i = 0; i < n; i++) {
+            if (board[i][j] !== 0) col.push(board[i][j]);
+        }
+
+        let newCol = moveRow(col);
+        for (let i = 0; i < n; i++) {
+            newBoard[i][j] = newCol[i];
         }
     }
-    return bd;
+    return newBoard;
 };
 
+// **하 (Down) 이동**
+const moveDown = (board) => {
+    let newBoard = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let j = 0; j < n; j++) {
+        let col = [];
+        for (let i = n - 1; i >= 0; i--) {
+            if (board[i][j] !== 0) col.push(board[i][j]);
+        }
+
+        let newCol = moveRow(col);
+        newCol.reverse(); // 아래쪽에서 쌓이므로 뒤집어야 함
+        for (let i = 0; i < n; i++) {
+            newBoard[i][j] = newCol[i];
+        }
+    }
+    return newBoard;
+};
+
+// **좌 (Left) 이동**
+const moveLeft = (board) => {
+    let newBoard = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let i = 0; i < n; i++) {
+        newBoard[i] = moveRow(board[i]);
+    }
+
+    return newBoard;
+};
+
+// **우 (Right) 이동**
+const moveRight = (board) => {
+    let newBoard = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let i = 0; i < n; i++) {
+        let reversedRow = [...board[i]].reverse(); // 오른쪽 이동을 위해 뒤집기
+        let newRow = moveRow(reversedRow);
+        newBoard[i] = newRow.reverse(); // 다시 원래 방향으로 돌려놓기
+    }
+
+    return newBoard;
+};
+
+// **DFS 탐색 (5번 이동)**
 let max = 0;
 const dfs = (depth, board) => {
     max = Math.max(max, getMax(board));
     if (depth === 5) return;
 
-    let moves = [moveRight, moveLeft, moveUp, moveDown];
+    let moves = [moveUp, moveDown, moveLeft, moveRight];
     for (let move of moves) {
-        let newBoard = move(board.map((row) => [...row]));
+        let newBoard = move(board.map(row => [...row])); // 깊은 복사 후 이동 실행
         dfs(depth + 1, newBoard);
     }
 };
