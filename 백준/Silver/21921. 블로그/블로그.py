@@ -3,29 +3,22 @@ input = sys.stdin.readline
 
 n, x = map(int, input().split())
 arr = list(map(int, input().split()))
-ans = []
 
-startIdx = 0
-endIdx = x-1
+curSum = sum(arr[:x])
+maxSum = curSum
+count = 1
 
-while(endIdx < n):
-    lastSum = 0
-        
-    if startIdx == 0:
-        curSum = sum(arr[startIdx:endIdx+1])
-    else:
-        curSum = curSum - arr[startIdx - 1] + arr[endIdx]
+for i in range(x, n):
+    curSum = curSum - arr[i - x] + arr[i]
 
-    ans.append(curSum)
+    if curSum > maxSum:
+        maxSum = curSum
+        count = 1
+    elif curSum == maxSum:
+        count += 1
 
-    startIdx += 1
-    endIdx += 1
-
-max = max(ans)
-count = ans.count(max)
-
-if max == 0:
-    print('SAD')
+if maxSum == 0:
+    print("SAD")
 else:
-    print(max)
+    print(maxSum)
     print(count)
