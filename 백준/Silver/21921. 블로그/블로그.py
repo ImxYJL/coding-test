@@ -8,7 +8,7 @@ ans = []
 startIdx = 0
 endIdx = x-1
 
-while(startIdx < n and endIdx < n):
+while(endIdx < n):
     lastSum = 0
         
     if startIdx == 0:
