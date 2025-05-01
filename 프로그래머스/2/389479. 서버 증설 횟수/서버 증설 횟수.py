@@ -1,7 +1,7 @@
 def solution(players, m, k):
     answer = 0
     cur_server = 0
-    server_off = [0] * (len(players) + k + 1)
+    server_off = [0] * 50
 
     for t, n in enumerate(players):
         # 1. t 시점에서, 반납할 서버가 있으면 먼저 반납
