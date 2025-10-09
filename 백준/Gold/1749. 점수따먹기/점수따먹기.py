@@ -13,9 +13,9 @@ sum = [[0] * (m+1) for _ in range(n+1)]
 def kadane(array):
     if not array:
         return 0
-
-    curSum = array[1]
-    maxSum = array[1]
+    
+    curSum = array[1] # 음수가 있으므로 0으로 하면 안 됨!
+    maxSum = -float('inf')
 
     for i in range(2, len(array)):
         num = array[i]
