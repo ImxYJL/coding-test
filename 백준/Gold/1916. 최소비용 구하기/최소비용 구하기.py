@@ -20,14 +20,16 @@ dis[startV] = 0
 
 while pq:
     curD, curV = heapq.heappop(pq)
-        
-    if dis[curV] == curD:
-        for nextItem in adj[curV]:
-            nextD, nextV = nextItem
-            newD = dis[curV] + nextD
+
+    if curD > dis[curV]:
+         continue
+
+    for nextItem in adj[curV]:
+        nextD, nextV = nextItem
+        newD = dis[curV] + nextD
             
-            if dis[nextV] > newD:
-                dis[nextV] = newD
-                heapq.heappush(pq, (newD, nextV))
+        if dis[nextV] > newD:
+            dis[nextV] = newD
+            heapq.heappush(pq, (newD, nextV))
 
 print(dis[endV])
