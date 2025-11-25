@@ -16,8 +16,7 @@ for endIdx in range(n):
     while oddCnt > k:
         if arr[startIdx] % 2 != 0:
             oddCnt -= 1
-        startIdx += 1
-        
+        startIdx += 1 
     maxLen = max(maxLen, endIdx - oddCnt - startIdx + 1)
 
 print(maxLen)
